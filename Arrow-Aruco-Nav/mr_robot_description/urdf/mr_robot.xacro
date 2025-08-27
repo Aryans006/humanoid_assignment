@@ -1,0 +1,193 @@
+<?xml version="1.0" ?>
+<robot name="mr_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find mr_robot_description)/urdf/materials.xacro" />
+<xacro:include filename="$(find mr_robot_description)/urdf/mr_robot.trans" />
+<xacro:include filename="$(find mr_robot_description)/urdf/mr_robot.gazebo" />
+
+<link name="imu_link">
+  <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+        <box size="0.02 0.015 0.008"/>
+      </geometry>
+    </visual>   
+  </link>
+
+<link name="base_link">
+  <inertial>
+    <origin xyz="-0.004201988917363847 0.0016044494109548075 0.0847154915126352" rpy="0 0 0"/>
+    <mass value="11.747369099839622"/>
+    <inertia ixx="0.185521" iyy="0.434537" izz="0.601531" ixy="0.000399" iyz="0.000191" ixz="-0.002314"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find mr_robot_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="green"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find mr_robot_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="mr_robot/base_link/gpu_lidar">
+  <inertial>
+    <origin xyz="-0.0017059004296806112 -8.513948580313796e-17 -0.07729885777720902" rpy="0 0 0"/>
+    <mass value="0.2"/>
+    <inertia ixx="0.000489" iyy="0.000861" izz="0.000987" ixy="-0.0" iyz="0.0" ixz="0.000148"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.0 0.0 -0.23" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find mr_robot_description)/meshes/lidar_v1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="blue"/>
+  </visual>
+  <collision>
+    <origin xyz="0.0 0.0 -0.23" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find mr_robot_description)/meshes/lidar_v1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="camera_joint" type="fixed">
+    <axis xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0.27 0 0.14"/>
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+  </joint>
+
+<joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_link_optical"/>
+    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+  </joint>
+
+<link name="camera_link_optical"></link>
+
+ <link name="camera_link">
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.05"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>     <!-- roll pitch and yaw in radians and xyz in meters-->
+      <geometry> 
+        <box size="0.05 0.05 0.05"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <inertial>
+      <mass value="1e-5"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+
+  <joint name="depth_camera_joint" type="fixed">
+    <axis xyz="0 0 0" />
+    <origin xyz="0.27 0.1 0.14" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="mr_robot/base_link/depth_camera"/>
+  </joint>
+
+ 
+  <link name="mr_robot/base_link/depth_camera">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.05 0.05 0.05"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.05 0.05 0.05"/>
+      </geometry>
+      <material name="dark_blue"/>
+    </visual>
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <link name="Wheel_r_1">
+  <inertial>
+    <origin xyz="7.587052287765051e-07 -0.023812499999986303 5.494367044764359e-06" rpy="0 0 0"/>
+    <mass value="0.5"/>
+    <inertia ixx="0.002748" iyy="0.005028" izz="0.002748" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.0 -0.2 -0.0629" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find mr_robot_description)/meshes/Wheel_r_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.0 -0.2 -0.0629" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find mr_robot_description)/meshes/Wheel_r_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="imu_joint" type="fixed">
+  <origin xyz="0 0 0.18" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="imu_link"/>
+  <axis xyz="0 0 0" />
+</joint>  
+
+<link name="Wheel_l_1">
+  <inertial>
+    <origin xyz="9.233884580835298e-07 0.023812500000002568 5.551215635751783e-06" rpy="0 0 0"/>
+    <mass value="0.5"/>
+    <inertia ixx="0.002748" iyy="0.005028" izz="0.002748" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.0 0.19 -0.0629" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find mr_robot_description)/meshes/Wheel_l_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="0.0 0.19 -0.0629" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find mr_robot_description)/meshes/Wheel_l_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="Rigid 13" type="fixed">
+  <origin xyz="0.0 0.0 0.23" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="mr_robot/base_link/gpu_lidar"/>
+</joint>
+
+<joint name="Revolute 20" type="continuous">
+  <origin xyz="0.0 -0.163275 0.0629" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="Wheel_r_1"/>
+  <axis xyz="0.0 1.0 -0.0"/>
+</joint>
+
+<joint name="Revolute 21" type="continuous">
+  <origin xyz="0.0 0.171525 0.0629" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="Wheel_l_1"/>
+  <axis xyz="-0.0 1.0 0.0"/>
+</joint>
+
+</robot>
